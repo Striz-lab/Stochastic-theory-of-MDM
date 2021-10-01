@@ -2,8 +2,8 @@
 boundary    p p p
 
 variable        i loop 1
-variable        lj_density equal 0.7
-variable        lj_temp equal 2.0
+variable        lj_density equal 0.5
+variable        lj_temp equal 0.44
 
 units           lj # define units for model
 atom_style      atomic # model without bonds
@@ -34,10 +34,10 @@ run_style       verlet
 
 thermo          1000 # output to log each 1000 steps
 
-dump dump_1 all custom 1000000 start/start.dump id type x y z vx vy vz
+dump dump_1 all custom 10000 start/start.dump id type x y z vx vy vz
 
 dump_modify dump_1 sort id
 
-run             1000000
+run             10000
 
 unfix           nvt

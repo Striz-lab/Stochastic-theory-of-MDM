@@ -1,11 +1,13 @@
 boundary    p p p
 
+variable        ave_time    equal 10.0
 variable        step        equal 0.0005
 variable        nsnapshots  equal 1000
-variable        nsteps      equal 1000 #10/${step}
-variable        frequency   equal 1    #${nsteps}/${nsnapshots}
-variable        Temp        equal 1.0
-variable        F_thermo    equal 1000  #${frequency}*100
+variable        Temp        equal 0.44
+
+variable        nsteps      equal ${ave_time}/${step}
+variable        frequency   equal ${nsteps}/${nsnapshots}
+variable        F_thermo    equal ${frequency}*10
 
 #если шаг -- 0.01 то 10000 снапшотов, 10000 шагов
 
@@ -15,7 +17,7 @@ atom_style      atomic # model without bonds
 region          box block 0 10 0 10 0 10 # create box by multiplying by 10x10x10 initial unit cell
 create_box      1 box # create box
 
-read_dump start/start.dump 5000 x y z vx vy vz add yes
+read_dump start/start.dump 10000 x y z vx vy vz add yes
 mass            1 1.0
 
 pair_style      lj/cut 2.5 # force field parameters
