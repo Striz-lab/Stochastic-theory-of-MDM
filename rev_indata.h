@@ -1,6 +1,15 @@
 #-------------DETAILS OF SIMULATION------------------------------------------#
 boundary    p p p
 
+variable        ave_time    equal 10.0
+variable        step        equal 0.005
+variable        nsnapshots  equal 1000
+variable        Temp        equal 0.44
+
+variable        nsteps      equal ${ave_time}/${step}
+variable        frequency   equal ${nsteps}/${nsnapshots}
+variable        F_thermo    equal ${frequency}*10
+
 variable        i loop 1
 variable        lj_density equal 0.7
 variable        lj_temp equal 2.0
@@ -29,38 +38,33 @@ fix             nvt all nvt temp ${lj_temp} ${lj_temp} ${lj_temp}
 
 dump            id all atom 100 dump
 
-timestep        0.01 # MD simulation timestep
+timestep        ${step} # MD simulation timestep
 run_style       verlet
 
-thermo          100 # output to log each 1000 steps
+thermo          ${F_thermo} # output to log each 1000 steps
 
-dump dump_1 all custom 1 rev_indata/start.dump id type x y z vx vy vz
+dump dump_2 all custom ${frequency} rev_indata/${step}.txt id type xu yu zu vx vy vz
+dump_modify dump_2 sort id
 
-dump_modify dump_1 sort id
-
-run             10
+run             ${nsteps}
 
 unfix           nvt
 
-#variable vx atom -vx
-#variable vy atom -vy
-#variable vz atom -vz
+variable vxa atom -vx
+variable vya atom -vy
+variable vza atom -vz
 
-velocity all set vx vy vz
+velocity all set v_vxa v_vya v_vza
 
 fix             nvt all nvt temp ${lj_temp} ${lj_temp} ${lj_temp}
 
-dump            id all atom 100 dump
+#dump            id all atom 100 dump
 
-timestep        0.01 # MD simulation timestep
+timestep        ${step} # MD simulation timestep
 run_style       verlet
 
-thermo          100 # output to log each 1000 steps
+thermo          ${F_thermo} # output to log each 1000 steps
 
-dump dump_1 all custom 1 rev_indata/start.dump id type x y z vx vy vz
-
-dump_modify dump_1 sort id
-
-run             10
+run             ${nsteps}
 
 unfix           nvt

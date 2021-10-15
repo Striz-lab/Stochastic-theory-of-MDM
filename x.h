@@ -1,7 +1,7 @@
 boundary    p p p
 
 variable        ave_time    equal 10.0
-variable        step        equal 0.00001
+variable        step        equal 0.0005
 variable        nsnapshots  equal 1000
 variable        Temp        equal 0.44
 
@@ -24,14 +24,14 @@ pair_style      lj/cut 2.5 # force field parameters
 pair_coeff      1 1 1.0 1.0 2.5 # force field parameters
 
 reset_timestep  0
-timestep        ${step} # MD simulation timestep
 
 fix             nvt all nvt temp ${Temp} ${Temp} ${Temp}
 
-dump dump_1 all custom ${frequency} res_indata/${step}.txt id type xu yu zu vx vy vz
+dump dump_1 all custom ${frequency} ${step}.txt id type fx fy fz
 dump_modify dump_1 sort id
 
 thermo          ${F_thermo}
 run             ${nsteps}
 
 unfix           nvt
+

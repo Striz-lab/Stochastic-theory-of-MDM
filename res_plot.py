@@ -18,14 +18,12 @@ def graph(x, y, color, xlabel, ylabel, title, name):
     
     num_points = len(x)
 
-    min_fit_length = 50
+    min_fit_length = 3
 
     chi = 0
 
-    chi_min = 24#
-    '''
-    наверное лучше однозначное
-    '''
+    chi_min = 24
+
     j_best = 0
     
     
@@ -37,15 +35,16 @@ def graph(x, y, color, xlabel, ylabel, title, name):
         for k in range(j):
             chi += (y_linear[k] - y[k])**2
                 
-        if (chi < chi_min) and (chi > 23):#анал
+        if (chi < chi_min) and (chi > 23):
                 
             j_best = j
             chi_min = chi
-            print(chi_min)
+            #print(chi_min)
             
     coefs = np.polyfit(x[1:j_best],y[1:j_best],1)
     x_linear = x[0:j_best]
     y_linear = x[0:j_best] * coefs[0] + coefs[1]
+    
     print(j_best)
     ax.plot(x, y, '.', color=color)
     ax.plot(x_linear, y_linear, '.', color="blue")
@@ -69,7 +68,7 @@ data_1.columns = ["id", "type", "x", "y", "z", "vx", "vy", "vz"]
 data_2 = pd.read_csv(r'res_indata/'+name2+'.txt', skiprows = lambda x: logic(x), sep = " ", header = None)
 data_2.columns = ["id", "type", "x", "y", "z", "vx", "vy", "vz"]
 
-t = np.arange(1000)/0.0001
+t = np.arange(2000)/0.0001
 
 r = np.array(np.power(data_1.x-data_2.x, 2)+np.power(data_1.y-data_2.y, 2)+np.power(data_1.z-data_2.z, 2))
 v = np.array(np.power(data_1.vx - data_2.vx, 2) + np.power(data_1.vy - data_2.vy, 2) + np.power(data_1.vz - data_2.vz, 2))
